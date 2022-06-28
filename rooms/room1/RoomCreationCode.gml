@@ -1,0 +1,1 @@
+window_set_rectangle((display_get_width() / 2) - ((656 * 3) / 2), (display_get_height() / 2) - ((240 * 3) / 2), 656 * 3, 240 * 3);

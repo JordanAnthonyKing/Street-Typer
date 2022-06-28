@@ -81,7 +81,7 @@ if (state = states.hadouken) {
 	} else if (stateFrameCounter > 10 && stateFrameCounter <= 11) {
 		image_index = 3;
 	} else if (stateFrameCounter == 12) {
-		// Spawn hadoken
+		instance_create_layer(x + 40, y - 85, "Instances", oHadokenLight);
 	} else if (stateFrameCounter == 51) {
 		state = states.neutral;
 		stateFrameCounter = 0;
