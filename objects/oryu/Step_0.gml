@@ -55,11 +55,20 @@ if (state == states.neutral) {
 		image_speed = 1;
 		if (hsp == 0) {
 			sprite_index = sRyuStandingNeutral;	
+			active_head_box = standing_head_box;
+			active_body_box = standing_body_box;
+			active_leg_box = standing_leg_box;
 		} else {
 			if (sign(hsp)) {
-				sprite_index = sRyuWalkForward;	
+				sprite_index = sRyuWalkForward;
+				active_head_box = walk_forward_head_box;
+				active_body_box = walk_forward_body_box;
+				active_leg_box = walk_forward_leg_box;
 			} else {
 				sprite_index = sRyuWalkBack;
+				active_head_box = walk_back_head_box;
+				active_body_box = walk_back_body_box;
+				active_leg_box = walk_back_leg_box;
 			}
 		
 		}
@@ -68,24 +77,29 @@ if (state == states.neutral) {
 	//if (hsp != 0) image_xscale = sign(hsp);
 }
 
+// TODO: Make this generic
 if (state = states.hadouken) {
 	sprite_index = sRyuHadoken;
 	image_speed = 0;
-	// TODO: Make this use a switch and a simple if frameCount == duration
-	if (stateFrameCounter > -1 && stateFrameCounter <= 1) {
-		image_index = 0;
-	} else if (stateFrameCounter > 1 && stateFrameCounter <= 8) {
-		image_index = 1;
-	} else if (stateFrameCounter > 8 && stateFrameCounter <= 10) {
-		image_index = 2;
-	} else if (stateFrameCounter > 10 && stateFrameCounter <= 11) {
-		image_index = 3;
-	} else if (stateFrameCounter == 12) {
-		instance_create_layer(x + 40, y - 85, "Instances", oHadokenLight);
-	} else if (stateFrameCounter == 51) {
-		state = states.neutral;
-		stateFrameCounter = 0;
+	image_index = stateStepCounter;
+	
+	var stateStep = hadouken[stateStepCounter];
+	
+	if (stateStep.newHurtBox) {
+		active_head_box = stateStep.hurtBox.head;
+		active_body_box = stateStep.hurtBox.body;
+		active_leg_box = stateStep.hurtBox.legs;
 	}
 	
 	stateFrameCounter++;
+	if (stateFrameCounter == stateStep.frameCount) {
+		stateFrameCounter = 0;
+		stateStepCounter++;
+		
+		if (stateStepCounter == array_length(hadouken)) {
+			state = states.neutral;
+			stateFrameCounter = 0;
+			stateStepCounter = 0;
+		}
+	}
 }
